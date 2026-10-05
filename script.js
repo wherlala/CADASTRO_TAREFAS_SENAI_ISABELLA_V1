@@ -1,7 +1,7 @@
 class Tarefa {
     #concluida;
 
-    constructor(descricao, concluida = false) {
+    constructor(descricao, concluida = false, prazo = "") {
         descricao = descricao.trim();
 
         if (descricao === "") {
@@ -10,6 +10,7 @@ class Tarefa {
 
         this.descricao = descricao;
         this.#concluida = concluida;
+        this.prazo = prazo;
     }
 
     get concluida() {
@@ -18,6 +19,10 @@ class Tarefa {
 
     alternarConclusao() {
         this.#concluida = !this.#concluida;
+    }
+
+    definirPrazo(novoPrazo) {
+        this.prazo = novoPrazo;
     }
 }
 
@@ -50,7 +55,8 @@ function salvarTarefas() {
 
         return {
             descricao: tarefa.descricao,
-            concluida: tarefa.concluida
+            concluida: tarefa.concluida,
+            prazo: tarefa.prazo
         };
 
     });
@@ -78,7 +84,8 @@ function carregarTarefas() {
 
             const tarefa = new Tarefa(
                 tarefaSalva.descricao,
-                tarefaSalva.concluida
+                tarefaSalva.concluida,
+                tarefaSalva.prazo
             );
 
             listaDeTarefas.push(tarefa);
@@ -104,10 +111,8 @@ botaoAdicionar.addEventListener("click", function () {
 
         listaDeTarefas.push(novaTarefa);
 
-        // Salva a tarefa
         salvarTarefas();
 
-        // Mostra a tarefa na tela
         renderizarTarefas();
 
         campoTarefas.value = "";
@@ -146,6 +151,32 @@ campoTarefas.addEventListener("keydown", function (event) {
 
 function renderizarTarefas() {
 
+    // ==============================
+    // ORDENAR TAREFAS ANTES DE RENDERIZAR
+    // ==============================
+
+    listaDeTarefas.sort(function (a, b) {
+        // 1. Concluídas vão para o final
+        if (a.concluida && !b.concluida) return 1;
+        if (!a.concluida && b.concluida) return -1;
+
+        // 2. Sem prazo vão para o final (acima das concluídas)
+        if (!a.prazo && !b.prazo) return 0;
+        if (!a.prazo) return 1;
+        if (!b.prazo) return -1;
+
+        // 3. Comparação de datas (prazo mais próximo primeiro)
+        const dataA = new Date(a.prazo);
+        const dataB = new Date(b.prazo);
+
+        return dataA - dataB;
+    });
+
+
+    // ==============================
+    // DESENHAR ELEMENTOS
+    // ==============================
+
     listaTarefas.innerHTML = "";
 
     listaDeTarefas.forEach(function (tarefa, index) {
@@ -162,7 +193,9 @@ function renderizarTarefas() {
         texto.textContent = tarefa.descricao;
 
 
-        // Verifica se está concluída
+        // ==============================
+        // VERIFICAÇÃO DE ESTADO (Concluída ou Atrasada)
+        // ==============================
 
         if (tarefa.concluida) {
 
@@ -170,7 +203,59 @@ function renderizarTarefas() {
 
             texto.style.opacity = "0.5";
 
+            texto.style.color = "inherit";
+
+            texto.style.fontWeight = "normal";
+
+        } else if (tarefa.prazo) {
+
+            const dataPrazo = new Date(tarefa.prazo + "T00:00:00");
+
+            const dataHoje = new Date();
+
+            dataHoje.setHours(0, 0, 0, 0);
+
+
+            if (dataPrazo < dataHoje) {
+
+                texto.style.color = "#ff4d4d";
+
+                texto.style.fontWeight = "bold";
+
+            } else {
+
+                texto.style.color = "inherit";
+
+                texto.style.fontWeight = "normal";
+
+            }
+
         }
+
+
+        // ==============================
+        // CAMPO DE PRAZO
+        // ==============================
+
+        const campoPrazo = document.createElement("input");
+
+        campoPrazo.type = "date";
+
+        campoPrazo.value = tarefa.prazo;
+
+        campoPrazo.title = "Adicionar prazo";
+
+        campoPrazo.classList.add("botao-acao", "campo-prazo");;
+
+        campoPrazo.addEventListener("change", function () {
+
+            tarefa.definirPrazo(campoPrazo.value);
+
+            salvarTarefas();
+
+            renderizarTarefas();
+
+        });
 
 
         // ==============================
@@ -199,7 +284,6 @@ function renderizarTarefas() {
 
             tarefa.alternarConclusao();
 
-            // Salva a alteração
             salvarTarefas();
 
             renderizarTarefas();
@@ -226,7 +310,6 @@ function renderizarTarefas() {
 
             listaDeTarefas.splice(index, 1);
 
-            // Salva a exclusão
             salvarTarefas();
 
             renderizarTarefas();
@@ -241,6 +324,8 @@ function renderizarTarefas() {
         const acoes = document.createElement("div");
 
         acoes.classList.add("acoes-tarefa");
+
+        acoes.appendChild(campoPrazo);
 
         acoes.appendChild(botaoConcluir);
 

@@ -1,21 +1,23 @@
 /* Variáveis CSS - facilitar o uso de temas para formatação */
 :root{
-    --gradiente-fundo:linear-gradient(134deg, #a8edea 0%, #fed6e3 100%);
-    --fundo-cartao: #fff;
+    --imagem-fundo:url(listras_fundo.png);
+    --fundo-cartao: #fff0f5;
     --cor-texto: #2d3748;
-    --cor-primaria: #6c5ce7;
-    --cor-primaria-destaque: #5b4bc4;
-    --cor-borda: #edf2f7;
-    --cor-perigo: #ff7675;
+    --cor-primaria: #ff90b5;
+    --cor-primaria-destaque: #ff5b91;
+    --cor-borda: #ff90b5;
+    --cor-perigo: #be1c1c;
     --cor-concluido: #a0aec0;
+    --cor-footer: #42202b;
 }
 
 /* Modo escuro (ativado via classe no body) */
 body.modo-escuro{
-    --gradiente-fundo: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-    --fundo-cartao: #1a202c;
+    --imagem-fundo: url(listras_escuras.jpg);
+    --fundo-cartao: #202020;
     --cor-texto: #f7fafc;
-    --cor-borda: #4a5568;
+    --cor-borda: #0c0c0c;
+    --cor-footer: #000000;
 }
 
 *{
@@ -26,13 +28,37 @@ body.modo-escuro{
     transition: background 0.3s, color 0.3;
 }
 
+.botao{
+    background:var(--cor-primaria);
+    color:black;
+    text-decoration:none;
+    padding: 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: 30px;
+}
+.botao:hover{
+    background: var(--cor-primaria-destaque);
+    transform: scale(1.05);
+    color: white;
+}
+
 body{
-    background: var(--gradiente-fundo);
+    background: var(--imagem-fundo);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
+}
+
+.campoPrazo{
+    border:none;
+    padding:2px 5px;
+    cursor:pointer;
+    background-color:transparent;
+    color: inherit;
 }
 
 .cartao-aplicacao{
@@ -43,6 +69,11 @@ body{
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+img{
+    max-width: 300px;
+    border-radius: 20px;
 }
 
 .cabecalho-aplicacao{
@@ -67,7 +98,7 @@ body{
 
 .caixa-entrada{
     display: flex;
-    gap: 10x;
+    gap: 5px;
     margin-bottom: 20px;
 }
 
@@ -147,6 +178,10 @@ input[type="text"]:focus{
     font-size: 0.85rem;
     color: var(--cor-concluido);
     text-align: center;
+}
+
+img.rodape-aplicacao{
+    max-width: 20px;
 }
 
 @keyframes aparecer{
