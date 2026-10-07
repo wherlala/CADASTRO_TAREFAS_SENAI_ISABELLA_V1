@@ -26,28 +26,12 @@ class Tarefa {
     }
 }
 
-
-// ==============================
-// LISTA DE TAREFAS
-// ==============================
-
 const listaDeTarefas = [];
-
-
-// ==============================
-// ELEMENTOS DO HTML
-// ==============================
-
 const campoTarefas = document.getElementById("campo-tarefa");
 const listaTarefas = document.getElementById("lista-tarefas");
 const contadorTarefas = document.getElementById("contador-tarefas");
 const botaoAdicionar = document.querySelector(".botao-principal");
 const botaoTema = document.getElementById("botao-alternar-tema");
-
-
-// ==============================
-// SALVAR TAREFAS
-// ==============================
 
 function salvarTarefas() {
 
@@ -66,11 +50,6 @@ function salvarTarefas() {
         JSON.stringify(tarefasParaSalvar)
     );
 }
-
-
-// ==============================
-// CARREGAR TAREFAS
-// ==============================
 
 function carregarTarefas() {
 
@@ -95,11 +74,6 @@ function carregarTarefas() {
 
     renderizarTarefas();
 }
-
-
-// ==============================
-// ADICIONAR TAREFA
-// ==============================
 
 botaoAdicionar.addEventListener("click", function () {
 
@@ -127,11 +101,6 @@ botaoAdicionar.addEventListener("click", function () {
 
 });
 
-
-// ==============================
-// ADICIONAR COM ENTER
-// ==============================
-
 campoTarefas.addEventListener("keydown", function (event) {
 
     if (event.key === "Enter") {
@@ -144,16 +113,7 @@ campoTarefas.addEventListener("keydown", function (event) {
 
 });
 
-
-// ==============================
-// RENDERIZAR TAREFAS
-// ==============================
-
 function renderizarTarefas() {
-
-    // ==============================
-    // ORDENAR TAREFAS ANTES DE RENDERIZAR
-    // ==============================
 
     listaDeTarefas.sort(function (a, b) {
         // 1. Concluídas vão para o final
@@ -172,11 +132,6 @@ function renderizarTarefas() {
         return dataA - dataB;
     });
 
-
-    // ==============================
-    // DESENHAR ELEMENTOS
-    // ==============================
-
     listaTarefas.innerHTML = "";
 
     listaDeTarefas.forEach(function (tarefa, index) {
@@ -185,17 +140,9 @@ function renderizarTarefas() {
 
         item.classList.add("item-tarefa");
 
-
-        // Texto da tarefa
-
         const texto = document.createElement("span");
 
         texto.textContent = tarefa.descricao;
-
-
-        // ==============================
-        // VERIFICAÇÃO DE ESTADO (Concluída ou Atrasada)
-        // ==============================
 
         if (tarefa.concluida) {
 
@@ -232,11 +179,6 @@ function renderizarTarefas() {
 
         }
 
-
-        // ==============================
-        // CAMPO DE PRAZO
-        // ==============================
-
         const campoPrazo = document.createElement("input");
 
         campoPrazo.type = "date";
@@ -256,11 +198,6 @@ function renderizarTarefas() {
             renderizarTarefas();
 
         });
-
-
-        // ==============================
-        // BOTÃO CONCLUIR
-        // ==============================
 
         const botaoConcluir = document.createElement("button");
 
@@ -290,11 +227,6 @@ function renderizarTarefas() {
 
         });
 
-
-        // ==============================
-        // BOTÃO EXCLUIR
-        // ==============================
-
         const botaoExcluir = document.createElement("button");
 
         botaoExcluir.classList.add(
@@ -316,11 +248,6 @@ function renderizarTarefas() {
 
         });
 
-
-        // ==============================
-        // ÁREA DOS BOTÕES
-        // ==============================
-
         const acoes = document.createElement("div");
 
         acoes.classList.add("acoes-tarefa");
@@ -331,10 +258,6 @@ function renderizarTarefas() {
 
         acoes.appendChild(botaoExcluir);
 
-
-        // ==============================
-        // MONTAR TAREFA
-        // ==============================
 
         item.appendChild(texto);
 
@@ -347,11 +270,6 @@ function renderizarTarefas() {
 
     atualizarContador();
 }
-
-
-// ==============================
-// CONTADOR
-// ==============================
 
 function atualizarContador() {
 
@@ -377,11 +295,6 @@ function atualizarContador() {
 
 }
 
-
-// ==============================
-// ALTERNAR TEMA
-// ==============================
-
 botaoTema.addEventListener("click", function () {
 
     document.body.classList.toggle("modo-escuro");
@@ -404,10 +317,5 @@ botaoTema.addEventListener("click", function () {
     }
 
 });
-
-
-// ==============================
-// CARREGAR TAREFAS AO ABRIR
-// ==============================
 
 carregarTarefas();
